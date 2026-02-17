@@ -1,5 +1,5 @@
 package com.example.usermanagement.controller;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import com.example.usermanagement.dto.UserRequestDto;
 import com.example.usermanagement.dto.UserResponseDto;
 import com.example.usermanagement.service.UserService;
@@ -20,6 +20,7 @@ public class UserController {
     }
 
     // 🔐 ADMIN ONLY
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDto createUser(@Valid @RequestBody UserRequestDto request) {

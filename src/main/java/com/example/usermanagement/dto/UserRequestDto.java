@@ -2,20 +2,26 @@ package com.example.usermanagement.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotEmpty;
+import java.util.List;
 
 public class UserRequestDto {
 
-    @NotBlank(message = "Name cannot be empty")
+    @NotBlank
     private String name;
 
-    @Email(message = "Invalid email format")
-    @NotBlank(message = "Email cannot be empty")
+    @Email
+    @NotBlank
     private String email;
 
-    @NotBlank(message = "Password cannot be empty")
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    @NotBlank
     private String password;
+
+    // ✅ NEW FIELD
+    @NotEmpty
+    private List<String> roleNames;
+
+    // getters and setters
 
     public String getName() {
         return name;
@@ -35,6 +41,14 @@ public class UserRequestDto {
 
     public String getPassword() {
         return password;
+    }
+
+    public List<String> getRoleNames() {
+        return roleNames;
+    }
+
+    public void setRoleNames(List<String> roleNames) {
+        this.roleNames = roleNames;
     }
 
     public void setPassword(String password) {

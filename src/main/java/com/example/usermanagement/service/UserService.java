@@ -1,4 +1,6 @@
 package com.example.usermanagement.service;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.example.usermanagement.dto.UserRequestDto;
 import com.example.usermanagement.dto.UserResponseDto;
@@ -38,15 +40,20 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        Role defaultRole = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Default role ROLE_USER not found"));
+        // ✅ Assign roles dynamically
+        Set<Role> roles = request.getRoleNames().stream()
+                .map(roleName -> roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new RuntimeException("Role not found: " + roleName)))
+                .collect(Collectors.toSet());
 
-        user.getRoles().add(defaultRole);
+        user.setRoles(roles);
+
 
         User savedUser = userRepository.save(user);
 
         return mapToDto(savedUser);
     }
+
 
     // GET ALL
     public List<UserResponseDto> getAllUsers() {
